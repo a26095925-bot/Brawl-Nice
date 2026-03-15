@@ -1,0 +1,32 @@
+name: Build Brawl Nice EXE
+
+on:
+  push:
+    branches: [ "main" ]  # Запускати, коли ти оновлюєш код
+
+jobs:
+  build:
+    runs-on: windows-latest  # Оце головна фішка — збірка на Windows!
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pygame pyinstaller
+
+    - name: Build EXE
+      run: |
+        pyinstaller --onefile --windowed main.py
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Brawl-Nice-Windows
+        path: dist/main.exe
